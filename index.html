@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="theme-color" content="#075e54">
 <meta name="apple-mobile-web-app-capable" content="yes">
-<title>רמי 🐀</title>
+<title>רטטוי 🐀</title>
 <style>
   :root {
     --header: #075e54;
@@ -168,7 +168,7 @@
 <body>
   <header>
     <div class="avatar" id="avatar" aria-hidden="true">
-      <!-- Remy: grey rat with a chef hat -->
+      <!-- Ratatouille: grey rat with a chef hat -->
       <svg viewBox="0 0 64 64">
         <ellipse cx="17" cy="34" rx="8" ry="9" fill="#8a8f98"/>
         <ellipse cx="17" cy="34" rx="4.5" ry="5.5" fill="#e8a7b0"/>
@@ -190,7 +190,7 @@
       </svg>
     </div>
     <div class="who">
-      <span class="name">רמי 🧀</span>
+      <span class="name">רטטוי 🧀</span>
       <span class="status" id="status">מחובר</span>
     </div>
   </header>
@@ -270,7 +270,7 @@
     document.body.classList.toggle('as-remy', state.asRemy);
   }
 
-  // Hidden mode switch: tap Remy's avatar 3 times quickly.
+  // Hidden mode switch: tap Ratatouille's avatar 3 times quickly.
   let taps = 0, tapTimer = null;
   avatar.addEventListener('click', () => {
     taps++;
@@ -326,7 +326,7 @@
     };
 
     if (from === 'remy') {
-      // Make it look like Remy is typing for a moment
+      // Make it look like Ratatouille is typing for a moment
       status.textContent = 'מקליד...';
       clearTimeout(typingTimer);
       typingTimer = setTimeout(() => {
