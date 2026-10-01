@@ -65,8 +65,8 @@
   .who { display: flex; flex-direction: column; line-height: 1.2; }
   .who .name { font-weight: 600; font-size: 17px; }
   .who .status { font-size: 13px; opacity: .85; }
-  #swap {
-    margin-inline-start: auto;
+  .actions { margin-inline-start: auto; display: flex; gap: 4px; }
+  #swap, #refresh {
     width: 40px; height: 40px;
     border: none;
     border-radius: 50%;
@@ -76,8 +76,10 @@
     cursor: pointer;
     transition: transform .25s ease;
   }
-  #swap:active { background: rgba(255,255,255,.15); }
-  #swap svg { width: 24px; height: 24px; }
+  #swap:active, #refresh:active { background: rgba(255,255,255,.15); }
+  #swap svg, #refresh svg { width: 24px; height: 24px; }
+  #refresh.spin { animation: spin .5s ease; }
+  @keyframes spin { to { transform: rotate(-360deg); } }
   body.as-remy #swap { transform: rotate(180deg); }
 
   #chat {
@@ -207,9 +209,14 @@
       <span class="name">רטטוי 🧀</span>
       <span class="status" id="status">מחובר</span>
     </div>
+    <div class="actions">
+    <button id="refresh" aria-label="רענן שיחה">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 12a8 8 0 1 1-2.34-5.66M20 4v5h-5"/></svg>
+    </button>
     <button id="swap" aria-label="החלף משתמש">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 4L3 8l4 4M3 8h14M17 20l4-4-4-4M21 16H7"/></svg>
     </button>
+    </div>
   </header>
 
   <main id="chat"></main>
@@ -237,10 +244,11 @@
   } catch (e) {}
   const save = () => { try { localStorage.setItem(KEY, JSON.stringify(state)); } catch (e) {} };
 
-  if (!state.messages.length) {
+  function greet() {
     state.messages.push({ id: Date.now(), from: 'remy', text: 'בונז\'ור! 🐀👨‍🍳\nכל אחד יכול לבשל!', t: Date.now() });
     save();
   }
+  if (!state.messages.length) greet();
 
   const fmtTime = t => new Date(t).toLocaleTimeString('he-IL', { hour: '2-digit', minute: '2-digit' });
   const fmtDay = t => {
@@ -298,6 +306,20 @@
   document.getElementById('swap').addEventListener('click', () => {
     toggleMode();
     text.focus();
+  });
+
+  // Refresh button: start the conversation over.
+  const refresh = document.getElementById('refresh');
+  refresh.addEventListener('click', () => {
+    if (!confirm('להתחיל שיחה חדשה? כל ההודעות יימחקו')) return;
+    clearTimeout(typingTimer);
+    status.textContent = 'מחובר';
+    state.messages = [];
+    greet();
+    render();
+    refresh.classList.remove('spin');
+    void refresh.offsetWidth;
+    refresh.classList.add('spin');
   });
 
   // Hidden mode switch: tap Ratatouille's avatar 3 times quickly.
