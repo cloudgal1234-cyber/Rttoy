@@ -65,6 +65,20 @@
   .who { display: flex; flex-direction: column; line-height: 1.2; }
   .who .name { font-weight: 600; font-size: 17px; }
   .who .status { font-size: 13px; opacity: .85; }
+  #swap {
+    margin-inline-start: auto;
+    width: 40px; height: 40px;
+    border: none;
+    border-radius: 50%;
+    background: transparent;
+    color: #fff;
+    display: grid; place-items: center;
+    cursor: pointer;
+    transition: transform .25s ease;
+  }
+  #swap:active { background: rgba(255,255,255,.15); }
+  #swap svg { width: 24px; height: 24px; }
+  body.as-remy #swap { transform: rotate(180deg); }
 
   #chat {
     flex: 1;
@@ -193,6 +207,9 @@
       <span class="name">רטטוי 🧀</span>
       <span class="status" id="status">מחובר</span>
     </div>
+    <button id="swap" aria-label="החלף משתמש">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 4L3 8l4 4M3 8h14M17 20l4-4-4-4M21 16H7"/></svg>
+    </button>
   </header>
 
   <main id="chat"></main>
@@ -270,6 +287,19 @@
     document.body.classList.toggle('as-remy', state.asRemy);
   }
 
+  function toggleMode() {
+    state.asRemy = !state.asRemy;
+    save();
+    applyMode();
+    if (navigator.vibrate) navigator.vibrate(30);
+  }
+
+  // Arrow button in the header switches who is writing.
+  document.getElementById('swap').addEventListener('click', () => {
+    toggleMode();
+    text.focus();
+  });
+
   // Hidden mode switch: tap Ratatouille's avatar 3 times quickly.
   let taps = 0, tapTimer = null;
   avatar.addEventListener('click', () => {
@@ -278,10 +308,7 @@
     tapTimer = setTimeout(() => { taps = 0; }, 600);
     if (taps >= 3) {
       taps = 0;
-      state.asRemy = !state.asRemy;
-      save();
-      applyMode();
-      if (navigator.vibrate) navigator.vibrate(30);
+      toggleMode();
     }
   });
 
